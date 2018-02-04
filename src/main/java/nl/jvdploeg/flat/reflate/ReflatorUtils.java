@@ -197,7 +197,6 @@ public abstract class ReflatorUtils {
     final List<String> parts = new ArrayList<>();
     final String[] split = pathExpression.isEmpty() ? new String[0] : pathExpression.split(PATH_SEPARATOR);
     parts.addAll(Arrays.asList(split));
-    boolean startsWithIndex = false;
     for (int i = 0; i < parts.size(); i++) {
       final String part = parts.get(i);
       if (isFieldName(part)) {
@@ -206,7 +205,9 @@ public abstract class ReflatorUtils {
         parts.set(i, fieldValue);
       } else if (isIndexFieldName(part)) {
         if (i == 0) {
-          startsWithIndex = true;
+          final String fieldName = getFieldName(part);
+          final String fieldValue = getValue(fieldName, instance);
+          parts.set(i, fieldValue);
         } else {
           throw new ErrorBuilder() //
               .method("deflatePath") //
@@ -216,9 +217,6 @@ public abstract class ReflatorUtils {
               .build();
         }
       }
-    }
-    if (startsWithIndex) {
-      parts.remove(0);
     }
     return new Path(parts.toArray(new String[0]));
   }
