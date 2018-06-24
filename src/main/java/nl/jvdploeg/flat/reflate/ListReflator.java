@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import nl.jvdploeg.exception.Checks;
-import nl.jvdploeg.exception.ErrorBuilder;
+import nl.jvdploeg.exception.ThrowableBuilder;
 import nl.jvdploeg.flat.Model;
 import nl.jvdploeg.flat.Node;
 import nl.jvdploeg.flat.Path;
@@ -26,7 +26,7 @@ public final class ListReflator implements Reflator {
     // get inflated value
     final List<?> inflatedValue = ReflatorUtils.getValue(reflatableField, reflatable);
     if (inflatedValue == null) {
-      throw new ErrorBuilder() //
+      throw ThrowableBuilder.createIllegalStateExceptionBuilder() //
           .message("reflatable field must have a value") //
           .identity("reflatable", reflatable) //
           .field("reflatableField", reflatableField.getName()) //
@@ -55,7 +55,7 @@ public final class ListReflator implements Reflator {
         final Field indexField = ReflatorUtils.getField(childValue, indexFieldName);
         index = ReflatorUtils.getValue(indexField, childValue);
         if (index == null) {
-          throw new ErrorBuilder() //
+          throw ThrowableBuilder.createIllegalStateExceptionBuilder() //
               .message("index must have a value") //
               .identity("childValue", childValue) //
               .field("indexField", indexField.getName()) //
@@ -97,7 +97,7 @@ public final class ListReflator implements Reflator {
       try {
         newChild = reflatableValueElementClass.newInstance();
       } catch (InstantiationException | IllegalAccessException e) {
-        throw new ErrorBuilder() //
+        throw ThrowableBuilder.createIllegalStateExceptionBuilder() //
             .method("inflate") //
             .message("default constructor failed") //
             .field("reflatableValueElementClass", reflatableValueElementClass.getSimpleName()) //

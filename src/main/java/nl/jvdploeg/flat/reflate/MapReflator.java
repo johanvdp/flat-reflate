@@ -6,7 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.Set;
 
-import nl.jvdploeg.exception.ErrorBuilder;
+import nl.jvdploeg.exception.ThrowableBuilder;
 import nl.jvdploeg.flat.Model;
 import nl.jvdploeg.flat.Node;
 import nl.jvdploeg.flat.Path;
@@ -70,7 +70,7 @@ public final class MapReflator implements Reflator {
       try {
         newChild = reflatableValueElementClass.newInstance();
       } catch (InstantiationException | IllegalAccessException e) {
-        throw new ErrorBuilder() //
+        throw ThrowableBuilder.createIllegalStateExceptionBuilder() //
             .method("inflate") //
             .message("default constructor failed") //
             .field("reflatableValueElementClass", reflatableValueElementClass.getSimpleName()) //

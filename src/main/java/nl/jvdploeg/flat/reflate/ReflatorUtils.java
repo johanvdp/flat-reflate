@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import nl.jvdploeg.exception.ErrorBuilder;
+import nl.jvdploeg.exception.ThrowableBuilder;
 import nl.jvdploeg.flat.Model;
 import nl.jvdploeg.flat.Path;
 
@@ -67,7 +67,7 @@ public abstract class ReflatorUtils {
         return field;
       }
     }
-    throw new ErrorBuilder() //
+    throw ThrowableBuilder.createRuntimeExceptionBuilder() //
         .method("getField") //
         .message("class has no field with name") //
         .identity("reflatable", reflatable) //
@@ -129,7 +129,7 @@ public abstract class ReflatorUtils {
       final Method method = instance.getClass().getMethod(methodName);
       return method;
     } catch (NoSuchMethodException | SecurityException e) {
-      throw new ErrorBuilder() //
+      throw ThrowableBuilder.createIllegalStateExceptionBuilder() //
           .method("createGetMethod") //
           .message("should use simple field name to method name mapping") //
           .identity("instance", instance) //
@@ -147,7 +147,7 @@ public abstract class ReflatorUtils {
       final Reflator deflator = deflatorClass.newInstance();
       return deflator;
     } catch (InstantiationException | IllegalAccessException e) {
-      throw new ErrorBuilder() //
+      throw ThrowableBuilder.createRuntimeExceptionBuilder() //
           .method("createReflator") //
           .message("default constructor failed") //
           .identity("field", field.getName()) //
@@ -162,7 +162,7 @@ public abstract class ReflatorUtils {
       final Method method = instance.getClass().getMethod(methodName, valueClass);
       return method;
     } catch (NoSuchMethodException | SecurityException e) {
-      throw new ErrorBuilder() //
+      throw ThrowableBuilder.createRuntimeExceptionBuilder() //
           .method("createSetMethod") //
           .message("should use simple field name to method name mapping") //
           .identity("instance", instance) //
@@ -209,7 +209,7 @@ public abstract class ReflatorUtils {
           final String fieldValue = getValue(fieldName, instance);
           parts.set(i, fieldValue);
         } else {
-          throw new ErrorBuilder() //
+          throw ThrowableBuilder.createRuntimeExceptionBuilder() //
               .method("deflatePath") //
               .message("annotation index only allowed at start of path") //
               .identity("instance", instance) //
@@ -239,7 +239,7 @@ public abstract class ReflatorUtils {
     if (annotations.length == 1) {
       return annotations[0];
     }
-    throw new ErrorBuilder() //
+    throw ThrowableBuilder.createRuntimeExceptionBuilder() //
         .method("getReflatable") //
         .message("type should specify exactly one annotation") //
         .identity("object", object) //
@@ -254,7 +254,7 @@ public abstract class ReflatorUtils {
       final Object value = getMethod.invoke(object);
       return (T) value;
     } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-      throw new ErrorBuilder() //
+      throw ThrowableBuilder.createRuntimeExceptionBuilder() //
           .method("getValue") //
           .identity("object", object) //
           .field("fieldName", fieldName) //
@@ -302,7 +302,7 @@ public abstract class ReflatorUtils {
           final String fieldValue = sourcePath.getLastNodeName();
           setValue(fieldName, instance, fieldValue, String.class);
         } else {
-          throw new ErrorBuilder() //
+          throw ThrowableBuilder.createRuntimeExceptionBuilder() //
               .method("inflatePath") //
               .message("annotation index only allowed at start of path") //
               .identity("instance", instance) //
@@ -334,7 +334,7 @@ public abstract class ReflatorUtils {
     try {
       setMethod.invoke(object, value);
     } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-      throw new ErrorBuilder() //
+      throw ThrowableBuilder.createRuntimeExceptionBuilder() //
           .method("setValue") //
           .identity("object", object) //
           .field("fieldName", fieldName) //
